@@ -133,24 +133,8 @@ WITH mp_popular AS
 SELECT  *
 FROM mp_popular
 WHERE ranks = 1;
+
 -- 6. Which item was purchased first by the customer after they became a member? 
-WITH order_ranks AS
-(
-	SELECT  c.customer_id
-	       ,c.order_date
-	       ,c.product_id
-	       ,c.product_name
-	       ,row_number() over(Partition by c.customer_id ORDER BY c.order_date) AS order_rank
-	FROM customer_big_data c
-	LEFT JOIN members m
-	ON c.order_date >= m.join_date AND c.customer_id = m.customer_id
-	WHERE c.order_date >= m.join_date
-	ORDER BY c.customer_id , c.order_date 
-)
-SELECT  *
-FROM order_ranks
-WHERE order_rank = 1;
--- 7. Which item was purchased just before the customer became a member? 
 WITH order_ranks AS
 (
 	SELECT  c.customer_id
